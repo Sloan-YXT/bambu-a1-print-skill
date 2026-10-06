@@ -1,0 +1,23 @@
+{
+  "type": "process",
+  "name": "0.20mm @A1 + raft2 support fan3 gap0.2 (kimi)",
+  "inherits": "fdm_process_single_0.20",
+  "from": "system",
+  "setting_id": "GP079",
+  "instantiation": "true",
+  "compatible_printers": [
+    "Bambu Lab A1 0.4 nozzle",
+    "Bambu Lab A1 0.4 nozzle native-full (kimi)"
+  ],
+  "enable_support": "1",
+  "support_on_build_plate_only": "1",
+  "support_type": "normal(auto)",
+  "support_style": "default",
+  "curr_bed_type": "Textured PEI Plate",
+  "brim_type": "auto",
+  "brim_width": "0",
+  "close_fan_the_first_x_layers": "3",
+  "raft_layers": "2",
+  "support_interface_spacing": "0.2",
+  "avoid_crossing_wall": "1"
+}
