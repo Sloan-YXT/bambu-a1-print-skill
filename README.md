@@ -16,7 +16,9 @@ Bambu Lab A1 LAN-mode print pipeline for AI coding agents (Kimi Code / Claude Co
 SKILL.md                      # the skill body (Chinese, agent-agnostic)
 configs/
   machine_a1_native.json      # A1 machine profile with native start/end G-code inlined
-  process_raft2.json          # enclosure recipe: raft2 + support gap 0.2 + no fan first 3 layers
+  process_v16_qual.json       # support-free-by-design quality recipe: raft0, brim_object_gap 0.15 (recommended)
+  process_raft2.json          # legacy enclosure recipe: raft2 + support gap 0.2 + no fan first 3 layers
+  filament_pla228_v14.json    # PLA 228/226C (first layer / rest), smoothest run to date
   filament_pla195.json        # PLA 220/218C, textured PEI 65C
 scripts/
   _auth.py                    # IP/code/serial resolution (env vars or BambuStudio.conf), no hardcoded secrets

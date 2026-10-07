@@ -16,6 +16,7 @@ description: Bambu A1 3D打印全流程（LAN模式）——正确的CLI切片�
   - 自定义 machine/process/filament 预设名必须互相加入对方的 `compatible_printers`，否则报 "process not compatible with printer"（只给这一行，日志在输出目录 00000.log）。本仓库三个 json 的 compatible_printers 已互相对齐，改名时必须同步改。
 - 机壳类大平面件配方（`configs/process_raft2.json`）：raft_layers=2、enable_support=1、support_on_build_plate_only=1、support_interface_spacing=0.2（默认0.5会在簧片起印点反复触发AI检测）、close_fan_the_first_x_layers=3、brim 依附着力 5-8mm（设了要验证真打出来）。
 - **切完必须验 artifact 而不是信设置**（解 zip 读 `Metadata/plate_1.gcode`）：G392 原生头在不在、raft 走线在不在、brim 是否真有走线（`brim_type=auto` 可能一圈不打）、温度和层数。连续 6 锅失败的根因就是没做这一步。同理：任何"查看器/预览"的渲染都可能镜像或残缺，判断一律以物理产物（gcode 本体）为准。
+- **支撑归零化设计 + `brim_object_gap`（2026-10-07 v1.6，最丝滑一锅）**：机壳类件优先在几何上设计成免支撑（卡扣倾角/自悬垂角收进可打印域），而不是调支撑参数去救。验证方法：解 3mf 读 `plate_1.gcode`，按 `; FEATURE: X` 标记分段统计挤出量（注意 OrcaSlicer 2.4.2 的标记是 `; FEATURE:`，不是 `;TYPE:`），Support 段必须为零——配置里 `enable_support=1` 没关系，几何不需要就一段不打（对照：同模型 v1.5 还有 233 段/308mm 支撑，v1.6 归零后全程零报错）。推荐预设 `configs/process_v16_qual.json`（raft_layers=0、brim_object_gap=0.15、wall_loops=4、infill 50%）+ `configs/filament_pla228_v14.json`（首层 228°C、其余 226°C）。**键名坑：OrcaSlicer 2.4.2 用的是 `brim_object_gap`，不是 `brim_separation`，写错键名静默不生效。**
 
 ## 二、上传（FTPS 990，隐式 TLS，BBL 服务器很脆）
 
@@ -39,6 +40,6 @@ description: Bambu A1 3D打印全流程（LAN模式）——正确的CLI切片�
 
 ## 五、复用文件
 
-- 切片预设：`configs/machine_a1_native.json` / `configs/process_raft2.json` / `configs/filament_pla195.json`
+- 切片预设：`configs/machine_a1_native.json` / `configs/process_v16_qual.json`(免支撑质检版，推荐) / `configs/process_raft2.json`(老 raft 配方，备查) / `configs/filament_pla228_v14.json`(228/226°C) / `configs/filament_pla195.json`
 - 上传：`scripts/upload_lenient.py <本地3mf路径>`；开火：`scripts/fire_print.py <远端3mf文件名>`
 - 状态探测：`scripts/monitor.py`
